@@ -1,0 +1,13 @@
+name: WeatherApp
+title: WeatherApp
+username:
+account: charlywhitlow
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 8094539
+bundleId: 6763696
+url: https://charlywhitlow.shinyapps.io/WeatherApp/
+when: 1674479149.72547
+lastSyncTime: 1674479149.7255
+asMultiple: FALSE
+asStatic: FALSE

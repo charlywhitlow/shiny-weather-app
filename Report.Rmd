@@ -1,0 +1,50 @@
+---
+title: UK Weather comparison
+params:
+  selected.site.string: "Heathrow, Aldergrove, and Sumburgh" # default values
+  weather.var: "Air temperature"
+  summary.stat: "Mean"
+  aggregation: "Daily"
+  time.display: "Calendar Time"
+          
+output: word_document 
+---
+
+The data in this report was obtained from the Met Office Integrated Data Archive System, for weather stations at 20 different sites across the UK, over the period from 1st January to 30th November 2022. 
+
+# Location of selected sites `r params$selected.site.string`
+
+```{r MapPlot, echo=FALSE}
+load("data/RData/plots/map-plot.RData")
+map.plot
+```
+
+\newpage
+
+# Proportion of days Hutton Criteria met at each site
+
+```{r HuttonPlot, echo=FALSE, fig.height=6}
+load(file="data/RData/plots/hutton-summary-plot.RData")
+hutton.summary.plot
+```
+
+\newpage
+
+# Comparing `r params$summary.stat` `r params$weather.var` at selected sites
+
+```{r MainPlot, echo=FALSE, fig.width=6, fig.height=4}
+load("data/RData/plots/main-plot.RData")
+main.plot
+```
+
+\newpage
+
+# Daily means for last 7 days at selected sites 
+```{r SevenDayTable, echo=FALSE}
+load("data/RData/plots/seven-day-table-data.RData")
+
+library(knitr)
+kable(
+  seven.day.table.data  #TODO: set display digits, col wrap etc
+)
+```
