@@ -5,13 +5,16 @@ library(rsconnect)
 # ui
 ui <- fluidPage(
   theme = bslib::bs_theme(bootswatch = "darkly"), # set dark theme
-
+  h1("Weather stations in 2022 across the UK"),
+  br(),
+  
   # layout with 2 tabs
   tabsetPanel(  
     
     # tab 1 - comparisons by weather variable
-    tabPanel("Comparing Weather Data", 
-      h2("Comparing Weather Data at Different Sites across the UK"),
+    tabPanel("Comparing Weather Data",
+      br(),
+      h3("Comparing Weather Data at Different Sites"),
       p("The data in this app has been obtained from the Met Office Integrated Data Archive System, for weather stations at 20 different sites across the UK, over the period from 1st January to 30th November 2022. In this first tab, you can explore the different weather variables across the different sites, during this period."),
 
       # first sidebar layout
@@ -69,7 +72,7 @@ ui <- fluidPage(
         # map plot
         sidebarPanel(
           h4("Locations of selected sites:"),
-          plotOutput("mapPlot"), # output$mapPlot
+          plotOutput("mapPlot", height = 450), # output$mapPlot
           
           # download panel
           conditionalPanel(
@@ -89,8 +92,9 @@ ui <- fluidPage(
 
     # tab 2 - Hutton Criteria
     tabPanel("Hutton Criteria",
-      h2("Hutton Criteria"),
-      p("The Hutton Criteria occurs for a particular day when both criteria are met:"),
+      br(),
+      h2("Hutton Criteria - identifying blight risk"),
+      p("The Hutton Criteria identifies when there is a high risk of blight, and occurs for a particular day when both of the following criteria are met:"),
       tags$ol(
         tags$li("The two previous days have a minimum temperature of at least 10\u00B0C"), 
         tags$li("The two previous days have at least six hours of relative humidity in each day of 90% or higher")
@@ -99,6 +103,19 @@ ui <- fluidPage(
       # hutton sidebar layout
       sidebarLayout(
         sidebarPanel(
+          # Hutton summary plot
+          h3("Blight risk by site"),
+          h5("Proportion of days where Hutton Criteria Met at each site between 1st Jan - 30th Nov 2022"),
+          # plotOutput("huttonMapPlot", height = 450), # output$huttonMapPlot
+          plotOutput("huttonSummaryPlot", height = 600)
+        ),
+        # main panel
+        mainPanel(
+          
+          br(),
+          h3("Blight risk detail - for a specific site and month"),
+          p("Select a site and a month to see the detail for that month"),
+
           # Sites selector
           selectizeInput(
             "huttonSitesSelected", # var name in server
@@ -114,15 +131,8 @@ ui <- fluidPage(
             selected = "Jan",
             choices = c("Jan"=1, "Feb"=2, "Mar"=3, "Apr"=4, "May"=5, "Jun"=6, "Jul"=7, "Aug"=8, "Sep"=9, "Oct"=10, "Nov"=11) # TODO: add "Dec" & handle no data
           ),
-          
-          # Hutton summary plot
           hr(),
-          h3("Blight risk by site"),
-          h5("Proportion of days where Hutton Criteria Met at each site between 1st Jan - 30th Nov 2022"),
-          plotOutput("huttonSummaryPlot", height = 650)
-        ),
-        # main panel
-        mainPanel(
+          
           # detail by month
           uiOutput("huttonDetailByMonth"), # output$huttonDetailByMonth
         )

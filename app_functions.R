@@ -324,6 +324,13 @@ plot.chart <- function(selected.sites.names=NULL, weather.var, summary.fun, aggr
   }
 }
 
+# map API key
+config <- config::get()
+STADIA_MAPS_API_KEY <- config$STADIA_MAPS_API_KEY
+
+# UK bounding box
+uk <- c(left=-15, bottom=49, right=6, top=61.5) # uk bounding box
+
 # create map plot, highlighting selected sites
 plot.map <- function(selected.sites.names=NULL, show.selected.only=FALSE){
   # get selected sites
@@ -335,15 +342,12 @@ plot.map <- function(selected.sites.names=NULL, show.selected.only=FALSE){
   }
 
   # use label alpha to show/hide selected sites without moving labels
-  uk <- c(left=-12, bottom=49.9, right=3.5, top=60.9) # uk bounding box
   label.alpha <- rep(1, length(sites$Site_ID)) # default all 1
   if(show.selected.only==TRUE){
     label.alpha <- ifelse(sites$Site_ID %in% selected.sites$Site_ID, 1, 0)
   }
 
   # plot map
-  config <- config::get()
-  STADIA_MAPS_API_KEY <- config$STADIA_MAPS_API_KEY
   register_stadiamaps(config$STADIA_MAPS_API_KEY)
   get_stadiamap(uk, zoom=5, maptype = "stamen_toner") %>%
     ggmap() +
@@ -527,7 +531,6 @@ hutton.detail.table <- function(selected.site.names, selected.month){
       na_str = "Insufficient data"
     ) %>%
     colformat_datetime(fmt_date = "%d-%m-%Y") %>% # set date format
-    add_header_lines("Hutton Criteria Detail for selected Site and Month") %>%
     add_footer_lines("Days where Hutton Criteria are met indicated with 'Yes' against that day. Blank cells indicate criteria not met. Where there was insufficient data to determine Hutton criteria, this is indicated.") %>%
     fontsize(size = 20, part = "header", i = 1) %>%
     color(part="footer", color="grey") %>%
@@ -561,7 +564,7 @@ build.hutton.summary.plot <- function(){
       )) +
       geom_bar(stat = "identity", width=0.7) + # plot bar data as is
       theme(text=element_text(size=15)) + # increase text size
-      # ggtitle("Proportion of days Hutton Criteria met") + 
+      ggtitle("Proportion of days Hutton Criteria met") + 
       # theme(plot.title = element_text(hjust = -2)) +
       geom_text(aes(label = scales::percent(hutton.met.prop, accuracy=0.1)), hjust = -0.2, size = 4) + # add data labels to end of bars  #, size=3.2 
       theme(
