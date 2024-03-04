@@ -342,7 +342,10 @@ plot.map <- function(selected.sites.names=NULL, show.selected.only=FALSE){
   }
 
   # plot map
-  get_stamenmap(uk, zoom=5, maptype = "toner-background") %>%
+  config <- config::get()
+  STADIA_MAPS_API_KEY <- config$STADIA_MAPS_API_KEY
+  register_stadiamaps(config$STADIA_MAPS_API_KEY)
+  get_stadiamap(uk, zoom=5, maptype = "stamen_toner") %>%
     ggmap() +
     geom_point(
       data=sites, aes(x=Longitude, y=Latitude), color="red", pch=16) +

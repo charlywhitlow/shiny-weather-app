@@ -2,3 +2,9 @@
 main-plot.RData
 map-plot.RData
 seven-day-table-data.RData
+.Rproj.user
+.Rhistory
+*.Rproj
+*.yml
+.RData
+Report.knit.md
